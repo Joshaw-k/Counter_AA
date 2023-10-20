@@ -30,13 +30,29 @@ const Counter: React.FC<Props> = ({ smartAccount, provider }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const counterAddress = import.meta.env.VITE_COUNTER_CONTRACT_ADDRESS;
+  //   const contract = new ethers.Contract(counterAddress, abi, provider);
+  //   contract.on("updateCount", (newCount, event) => {
+  //     let info = {
+  //       newCount: newCount,
+  //       data: event,
+  //     };
+  //     console.log(info?.data?.newCount?.toNumber());
+  //   });
 
   const getCount = async (isUpdating: boolean) => {
     const contract = new ethers.Contract(counterAddress, abi, provider);
     setCounterContract(contract);
     const currentCount = await contract.number();
     const currentAddress = await contract.lastUser();
+    contract.on("updateCount", (newCount, event) => {
+      let info = {
+        newCount: newCount,
+        data: event,
+      };
+      setCount(Number(info.newCount));
+    });
     setCount(currentCount.toNumber());
+    console.log(count);
     setAddress(currentAddress);
     if (isUpdating) {
       toast.success("Count has been updated!", {
