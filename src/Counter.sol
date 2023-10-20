@@ -6,17 +6,18 @@ contract Counter {
 
     address public lastUser;
 
-    event updateCount(uint256 newCount);
+    event updateCount(uint256 newCount, address lastUser);
 
     function increment() public {
         number++;
-        emit updateCount(number);
+        emit updateCount(number,lastUser);
         lastUser = msg.sender;
     }
 
     function decrement() public {
+        if(number == 0) revert();
         number--;
-        emit updateCount(number);
+        emit updateCount(number,lastUser);
         lastUser = msg.sender;
     }
 
