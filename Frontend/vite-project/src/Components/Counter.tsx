@@ -44,6 +44,7 @@ const Counter: React.FC<Props> = ({ smartAccount, provider }) => {
     setCounterContract(contract);
     const currentCount = await contract.number();
     const currentAddress = await contract.lastUser();
+    setCount(currentCount.toNumber());
     contract.on("updateCount", (newCount, event) => {
       let info = {
         newCount: newCount,
@@ -51,7 +52,6 @@ const Counter: React.FC<Props> = ({ smartAccount, provider }) => {
       };
       setCount(Number(info.newCount));
     });
-    setCount(currentCount.toNumber());
     console.log(count);
     setAddress(currentAddress);
     if (isUpdating) {
